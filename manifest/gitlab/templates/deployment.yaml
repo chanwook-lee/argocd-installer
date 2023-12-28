@@ -123,7 +123,7 @@ spec:
   storageClassName: {{ .Values.pvc.storageClassName }}
   {{- end }}
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: {{ .Values.pvc.storage }}
