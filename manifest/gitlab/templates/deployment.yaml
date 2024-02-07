@@ -198,7 +198,7 @@ spec:
           grafana['enable'] = false
           nginx['client_max_body_size'] = '2500m'
           gitlab_rails['initial_root_password'] = "tmax@23!"
-          nginx['ssl_protocols'] = "TLSv1.1 TLSv1.2 TLSv1.3"
+          nginx['ssl_protocols'] = "TLSv1.1"
           EOT
           # Add keycloak
           {{- if .Values.keycloak.enabled }}
