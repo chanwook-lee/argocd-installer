@@ -9,13 +9,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: gitlab-account
-  namespace: gitlab-system
+  namespace: gitlab-system5
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: gitlab-role
-  namespace: gitlab-system
+  namespace: gitlab-system5
 rules:
 - apiGroups: [""]
   resources: ["services"]
@@ -43,7 +43,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: gitlab-binding
-  namespace: gitlab-system
+  namespace: gitlab-system5
 subjects:
 - kind: ServiceAccount
   name: gitlab-account
@@ -56,7 +56,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: gitlab-account-secret
-  namespace: gitlab-system
+  namespace: gitlab-system5
   annotations:
     kubernetes.io/service-account.name: gitlab-account
 type: kubernetes.io/service-account-token
@@ -65,7 +65,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gitlab-service
-  namespace: gitlab-system
+  namespace: gitlab-system5
   labels:
     app: gitlab
 spec:
@@ -85,7 +85,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: gitlab-ingress
-  namespace: gitlab-system
+  namespace: gitlab-system5
   labels:
     ingress.tmaxcloud.org/name: gitlab
   annotations:
@@ -115,7 +115,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: gitlab-pvc
-  namespace: gitlab-system
+  namespace: gitlab-system5
   labels:
     app: gitlab
 spec:
@@ -132,7 +132,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gitlab
-  namespace: gitlab-system
+  namespace: gitlab-system5
   labels:
     app: gitlab
 spec:
