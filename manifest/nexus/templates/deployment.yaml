@@ -38,6 +38,40 @@ spec:
     spec:
       serviceAccountName: {{ include "nexus.serviceAccountName" . }}
       initContainers:
+        - name: set-keycloak
+          {{- if .Values.global.registry.is_offline }}
+          image: "{{ .Values.global.registry.private_registry }}/{{ .Values.image.busybox.repo }}:{{ .Values.image.busybox.tag }}"
+          {{- else }}
+          image: "{{ .Values.image.busybox.repo }}:{{ .Values.image.busybox.tag }}"
+          {{- end }}
+          imagePullPolicy: IfNotPresent
+          securityContext:
+              runAsUser: 0
+          command:
+            - /bin/sh
+            - -c
+            - -x
+            - |
+              mkdir -p /opt/sonatype/nexus/etc
+              cat <<EOY > /opt/sonatype/nexus/etc/keycloak.json
+              {
+                "realm": "tmax",
+                "auth-server-url": "https://hyperauth.tmaxcloud.org/",
+                "ssl-required": "external",
+                "resource": "nexus3",
+                "verify-token-audience": true,
+                "credentials": {
+                  "secret": "KHOQOAoRlXOyPLlzK0jfScH6PhowhjtC"
+                },
+                "confidential-port": 0,
+                "policy-enforcer": {
+                  "credentials": {}
+                }
+              }
+              EOY
+          volumeMounts:
+            - name: opt-sonatype-nexus-etc
+              mountPath: /opt/sonatype/nexus/etc
         - name: set-logger-level
           {{- if .Values.global.registry.is_offline }}
           image: "{{ .Values.global.registry.private_registry }}/{{ .Values.image.busybox.repo }}:{{ .Values.image.busybox.tag }}"
@@ -193,8 +227,8 @@ spec:
                 <appender-ref ref="request.logfile"/>
               </configuration>
           volumeMounts:
-            - name: opt-sonatype-nexus-etc-logback
-              mountPath: /opt/sonatype/nexus/etc/logback
+            - name: opt-sonatype-nexus-etc
+              mountPath: /opt/sonatype/nexus/etc
       {{- if .Values.nexus.nodeSelector }}
       nodeSelector:
         {{ toYaml .Values.nexus.nodeSelector | nindent 8 }}

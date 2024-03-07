@@ -121,11 +121,11 @@ deployment:
   terminationGracePeriodSeconds: 120
   additionalContainers:
   additionalVolumes:
-    - name: opt-sonatype-nexus-etc-logback
+    - name: opt-sonatype-nexus-etc
       emptyDir: {}
   additionalVolumeMounts:
-    - name: opt-sonatype-nexus-etc-logback
-      mountPath: /opt/sonatype/nexus/etc/logback
+    - name: opt-sonatype-nexus-etc
+      mountPath: /opt/sonatype/nexus/etc
 
 
 service:
